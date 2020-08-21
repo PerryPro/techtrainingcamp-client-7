@@ -1,5 +1,6 @@
 /*
-为了学习方便，我对每一个container都加了一个外边框，如果想去掉，75行，85行，94行，343行注释即可。
+为了学习方便，我对每一个container都加了一个外边框，如果想去掉，76行，87行，96行，345行注释即可。
+背景填充在78行
 */
 import 'dart:ui';
 
@@ -49,7 +50,8 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
         if(disph==0&&dispm==0&&disps==0) {
           roll=true;
         }
-        if(_active==true) {time--;
+        if(_active==true) {
+          time--;
           if(time==0)roll=true;
         }
         if(roll==true) {
@@ -65,7 +67,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
         appBar: new AppBar(
           centerTitle: true,
           // elevation: 0,///设置AppBar透明，必须设置为0
-            title: Text('new world',style: TextStyle(color: Colors.white,fontSize: 22),),
+            title: Text('Timer',style: TextStyle(color: Colors.white,fontSize: 22),),
             backgroundColor: Color.fromRGBO(88, 147, 195, 1.0),
             leading:new Icon(Icons.access_alarm),
         ),
@@ -73,9 +75,9 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
             margin:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
             padding: const EdgeInsets.all(16.0),
             decoration: new BoxDecoration(
-              border: new Border.all(color: Colors.red),
+              //border: new Border.all(color: Colors.red),
               image: DecorationImage(
-                image: AssetImage("images/plane.jpg"),
+                image: AssetImage("images/墨水.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
@@ -84,7 +86,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
                 Container(
                   margin:  const EdgeInsets.fromLTRB(0, 24, 0, 20),
                   decoration: new BoxDecoration(
-                    border: new Border.all(color: Colors.red),
+                    //border: new Border.all(color: Colors.red),
                   ),
                   height: 550,
                   width: 400,
@@ -93,7 +95,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
                 Container(
                   margin:  const EdgeInsets.fromLTRB(0, 20, 0, 0),
                   decoration: new BoxDecoration(
-                    border: new Border.all(color: Colors.red),
+                    //border: new Border.all(color: Colors.red),
                   ),
                   height: 100,
                   width: 400,
@@ -190,7 +192,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                       child: Text(
                         onText,
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Color.fromRGBO(95, 95, 95, 1.0),
                             fontWeight: FontWeight.bold,
                             fontSize: 25),
                       ),
@@ -208,7 +210,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                       child: Text(
                         offText,
                         style: TextStyle(
-                            color: Colors.white,
+                            color: Color.fromRGBO(95, 95, 95, 1.0),
                             fontWeight: FontWeight.bold,
                             fontSize: 25),
                       ),
@@ -226,7 +228,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                       decoration: BoxDecoration(
                           shape: BoxShape.circle,
                         image: DecorationImage(
-                          image: AssetImage("images/plane.jpg"),
+                          image: AssetImage("images/星星.png"),
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -298,12 +300,13 @@ class _TimerAppState extends State<TimerApp> {
                 margin: EdgeInsets.only(top: 100),
                 height: 100,
                 width: 100,
+
                 child: RaisedButton(
                   shape: CircleBorder(
-                    side: BorderSide(
-                    ),
+                    side: BorderSide(),
                   ),
                   color:Colors.orange,
+
                   child: Text(_active ? 'STOP' : 'START'),
                   onPressed: press,
                 ),
@@ -342,7 +345,7 @@ class CustomTextContainer extends StatelessWidget {
             width: 80,
             margin:  const EdgeInsets.fromLTRB(0,10,0,20),
             decoration: new BoxDecoration(
-              border: new Border.all(color: Colors.red),
+             // border: new Border.all(color: Colors.red),
             ),
             child :new ScrollControllerTestRoute(
               label:label,
