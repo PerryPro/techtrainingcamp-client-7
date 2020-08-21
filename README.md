@@ -1,4 +1,4 @@
-# uiapp
+# Timer
 
 A new Flutter application.
 
