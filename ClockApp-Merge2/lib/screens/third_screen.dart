@@ -13,7 +13,7 @@ class ThirdTab extends StatelessWidget {
         //primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyTimer(),
+      home: BasicAppBarSample(),
     );
   }
 }
