@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import'dart:math';
 import 'dart:async';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 //计算总时间
 int time=20;
@@ -23,6 +24,14 @@ bool roll=false;
 //对第一个按钮状态的控制，false代表停止中，true代表运行中
 bool _active=false;
 
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: BasicAppBarSample(),
+    );
+  }
+}
 
 //主界面
 class BasicAppBarSample extends StatefulWidget {
@@ -31,7 +40,6 @@ class BasicAppBarSample extends StatefulWidget {
 }
 
 class _BasicAppBarSampleState extends State<BasicAppBarSample> {
-
 
   //用来检查是否滚动过
   Timer timer;
@@ -44,6 +52,8 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
   }
   @override
   Widget build(BuildContext context) {
+
+    ScreenUtil.init(context, width: 1080, height: 2070, allowFontScaling:false );
 
     if(timer == null){
       timer = Timer.periodic(duration , (Timer t) {
@@ -62,20 +72,21 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
 
     }
 
-    return new MaterialApp(
-      home: new Scaffold(
+    return  Scaffold(
         appBar: new AppBar(
           centerTitle: true,
           // elevation: 0,///设置AppBar透明，必须设置为0
-            title: Text('Timer',style: TextStyle(color: Colors.white,fontSize: 22),),
+            title: Text('Timer',style: TextStyle(color: Colors.white,fontSize:ScreenUtil().setSp(55)),),
             backgroundColor: Color.fromRGBO(88, 147, 195, 1.0),
             leading:new Icon(Icons.access_alarm),
         ),
         body: new Container(
-            margin:  const EdgeInsets.fromLTRB(0, 0, 0, 0),
-            padding: const EdgeInsets.all(16.0),
+            height: ScreenUtil().setHeight(1900),
+            width: ScreenUtil().setWidth(1080),
+            margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(0), ScreenUtil().setWidth(0), ScreenUtil().setHeight(0)),
+            padding:  EdgeInsets.all(ScreenUtil().setWidth(16)),
             decoration: new BoxDecoration(
-              //border: new Border.all(color: Colors.red),
+              border: new Border.all(color: Colors.red),
               image: DecorationImage(
                 image: AssetImage("images/墨水.jpg"),
                 fit: BoxFit.cover,
@@ -84,35 +95,34 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
             child:new Column(
               children: <Widget>[
                 Container(
-                  margin:  const EdgeInsets.fromLTRB(0, 24, 0, 20),
+                  margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(25), ScreenUtil().setWidth(0), ScreenUtil().setHeight(20)),
                   decoration: new BoxDecoration(
-                    //border: new Border.all(color: Colors.red),
+                    border: new Border.all(color: Colors.red),
                   ),
-                  height: 550,
-                  width: 400,
+                  height: ScreenUtil().setHeight(1450),
+                  width: ScreenUtil().setWidth(1080),
                   child: TimerApp(),
                 ),
                 Container(
-                  margin:  const EdgeInsets.fromLTRB(0, 20, 0, 0),
+                  margin:  EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(20), ScreenUtil().setWidth(0), ScreenUtil().setHeight(0)),
                   decoration: new BoxDecoration(
-                    //border: new Border.all(color: Colors.red),
+                    border: new Border.all(color: Colors.red),
                   ),
-                  height: 100,
-                  width: 400,
+                  height: ScreenUtil().setHeight(300),
+                  width: ScreenUtil().setWidth(1080),
                   child: RollingSwitch(),
                 ),
               ],
             )
         ),
-      ),
-    );
+      );
   }
 }
 
 
 void main() {
 
-  runApp(new BasicAppBarSample());
+  runApp(new MyApp());
 }
 
 
@@ -176,11 +186,11 @@ class _RollingSwitchState extends State<RollingSwitch>
            );
     }
     return  Container(
-            padding: EdgeInsets.only(left:15.0,top:15.0),
-            width: 450,
+            padding: EdgeInsets.only(left:ScreenUtil().setWidth(15),top:ScreenUtil().setHeight(60)),
+            width: ScreenUtil().setWidth(450),
             decoration: BoxDecoration(
                //  color:  Colors.lime,
-                borderRadius: BorderRadius.circular(50)),
+                borderRadius: BorderRadius.circular(ScreenUtil().setWidth(50))),
             child: Stack(
               children: <Widget>[
                 Transform.translate(
@@ -395,7 +405,7 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
 
-      //print(_controller.offset); //打印滚动位置
+      print(_controller.offset); //打印滚动位置
 
 
       if(_controller.offset%50==10){
@@ -429,12 +439,14 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
     if(timer == null){
       timer = Timer.periodic(duration, (Timer t){
         if(_controller.offset%50!=10&&roll==true) {
-          if(_controller.offset>2960&&_active==false)
+          if(_controller.offset>2960)
             {
-              _controller.animateTo(2960,
-                  duration:Duration(microseconds: 200),
-                  curve: Curves.linear
-              );
+              if(_active==false) {
+                _controller.animateTo(2960,
+                    duration: Duration(microseconds: 200),
+                    curve: Curves.linear
+                );
+              }
             }
           else if(_controller.offset%50<35)
           {
@@ -475,7 +487,7 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
                         duration: Duration(seconds: 60),
                         curve: Curves.linear
                     );
-                    count=-1;x=1;
+                    count=-60;x=1;
                   }
                 }
 
@@ -491,7 +503,7 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
                   _controller.jumpTo(3000,
                   );
                   _controller.animateTo(2960,
-                      duration: Duration(seconds: 1),
+                      duration: Duration(microseconds: 800),
                       curve: Curves.linear
                   );
                   count=-1;
