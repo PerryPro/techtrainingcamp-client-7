@@ -39,7 +39,7 @@ class BasicAppBarSample extends StatefulWidget {
   _BasicAppBarSampleState createState() => new _BasicAppBarSampleState();
 }
 
-class _BasicAppBarSampleState extends State<BasicAppBarSample> {
+class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKeepAliveClientMixin{
 
   //用来检查是否滚动过
   Timer timer;
@@ -76,8 +76,8 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
       appBar: new AppBar(
         centerTitle: true,
         // elevation: 0,///设置AppBar透明，必须设置为0
-        title: Text('Timer',style: TextStyle(color: Colors.white,fontSize:ScreenUtil().setSp(55)),),
-        backgroundColor: Color.fromRGBO(88, 147, 195, 1.0),
+        title: Text('计时器',style: TextStyle(color: Colors.white,fontSize:ScreenUtil().setSp(55)),),
+        backgroundColor: Color.fromARGB(255, 119, 136, 213),
         leading:new Icon(Icons.access_alarm),
       ),
       body: new Container(
@@ -85,21 +85,21 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
           width: ScreenUtil().setWidth(1080),
           margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(0), ScreenUtil().setWidth(0), ScreenUtil().setHeight(0)),
           padding:  EdgeInsets.all(ScreenUtil().setWidth(16)),
-          decoration: new BoxDecoration(
-            //border: new Border.all(color: Colors.red),
-            image: DecorationImage(
-              image: AssetImage("assets/image/墨水.jpg"),
-              fit: BoxFit.cover,
-            ),
-          ),
+//          decoration: new BoxDecoration(
+//            //border: new Border.all(color: Colors.red),
+//            image: DecorationImage(
+//              image: AssetImage("assets/image/墨水.jpg"),
+//              fit: BoxFit.cover,
+//            ),
+//          ),
           child:new Column(
             children: <Widget>[
               Container(
-                margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(25), ScreenUtil().setWidth(0), ScreenUtil().setHeight(20)),
+                margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(10), ScreenUtil().setWidth(0), ScreenUtil().setHeight(20)),
                 decoration: new BoxDecoration(
                   //border: new Border.all(color: Colors.red),
                 ),
-                height: ScreenUtil().setHeight(1250),
+                height: ScreenUtil().setHeight(1230),
                 width: ScreenUtil().setWidth(1080),
                 child: TimerApp(),
               ),
@@ -108,7 +108,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
                 decoration: new BoxDecoration(
                   //border: new Border.all(color: Colors.red),
                 ),
-                height: ScreenUtil().setHeight(300),
+                height: ScreenUtil().setHeight(230),
                 width: ScreenUtil().setWidth(1080),
                 child: RollingSwitch(),
               ),
@@ -117,6 +117,10 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 //
@@ -137,7 +141,7 @@ class RollingSwitch extends StatefulWidget {
 }
 
 class _RollingSwitchState extends State<RollingSwitch>
-    with SingleTickerProviderStateMixin {
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin{
   AnimationController animationController;
   Animation<double> animation;
   var value = 0.0;
@@ -202,7 +206,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                 child: Text(
                   onText,
                   style: TextStyle(
-                      color: Color.fromRGBO(95, 95, 95, 1.0),
+                      color: Color.fromRGBO(95, 95, 95, 0.0),
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
@@ -220,7 +224,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                 child: Text(
                   offText,
                   style: TextStyle(
-                      color: Color.fromRGBO(95, 95, 95, 1.0),
+                      color: Color.fromRGBO(95, 95, 95, 0.0),
                       fontWeight: FontWeight.bold,
                       fontSize: 25),
                 ),
@@ -263,6 +267,10 @@ class _RollingSwitchState extends State<RollingSwitch>
     );
   }
 
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
 }
 
 
@@ -275,7 +283,7 @@ class TimerApp extends StatefulWidget {
   _TimerAppState createState() => _TimerAppState();
 }
 
-class _TimerAppState extends State<TimerApp> {
+class _TimerAppState extends State<TimerApp> with AutomaticKeepAliveClientMixin{
 
   void press(){
     if(_active==true)roll=true;
@@ -288,7 +296,7 @@ class _TimerAppState extends State<TimerApp> {
   Widget build(BuildContext context) {
 
     return Container(
-      margin:  const EdgeInsets.fromLTRB(0, 125, 0, 0),
+      margin:  const EdgeInsets.fromLTRB(0, 35, 0, 0),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
@@ -308,16 +316,23 @@ class _TimerAppState extends State<TimerApp> {
           ),
           Container(
             margin: EdgeInsets.only(top: 100),
-            height: 100,
+            height: 75,
             width: 100,
 
             child: RaisedButton(
               shape: CircleBorder(
-                side: BorderSide(),
+                //side: ,
               ),
-              color:Colors.orange,
+              color:Color.fromARGB(255, 119, 136, 213),
 
-              child: Text(_active ? 'STOP' : 'START'),
+              child: Text(
+                  _active ? '停止' : '开始',
+                  style: TextStyle(
+                    color: Colors.white,
+                fontSize: 25,
+                //fontWeight: FontWeight.w700
+                  )
+              ),
               onPressed: press,
             ),
           ),
@@ -325,6 +340,10 @@ class _TimerAppState extends State<TimerApp> {
       ),
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
 
 
@@ -344,7 +363,7 @@ class CustomTextContainer extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: 5),
       padding: EdgeInsets.all(20),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
+        borderRadius: BorderRadius.circular(20),
         color: Colors.black87,
       ),
       child: Column(
@@ -352,8 +371,8 @@ class CustomTextContainer extends StatelessWidget {
         children: <Widget>[
           new Container (
             height: 50,
-            width: 80,
-            margin:  const EdgeInsets.fromLTRB(0,10,0,20),
+            width: 65,
+            margin:  const EdgeInsets.fromLTRB(0,20,0,20),
             decoration: new BoxDecoration(
               // border: new Border.all(color: Colors.red),
             ),
@@ -365,6 +384,7 @@ class CustomTextContainer extends StatelessWidget {
             "$label",
             style: TextStyle(
               color: Colors.white70,
+              fontSize: 18
             ),
           )
         ],
@@ -389,7 +409,7 @@ class ScrollControllerTestRoute extends StatefulWidget {
   }
 }
 
-class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
+class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> with AutomaticKeepAliveClientMixin{
 
 
   ScrollController _controller = new ScrollController(initialScrollOffset: 10.0);
@@ -405,7 +425,7 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
 
-      print(_controller.offset); //打印滚动位置
+      //print(_controller.offset); //打印滚动位置
 
 
       if(_controller.offset%50==10){
@@ -532,7 +552,7 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
             textAlign: TextAlign.center,
             style: TextStyle(
                 color: Colors.white,
-                fontSize: 50,
+                fontSize: 35,
                 fontWeight: FontWeight.bold
             ),
           );
@@ -541,4 +561,8 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> {
       onTap:() => roll=true,
     );
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

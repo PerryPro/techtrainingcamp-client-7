@@ -9,10 +9,11 @@ class MinuteHandPainter extends CustomPainter {
 
   MinuteHandPainter({this.minutes, this.seconds})
       : minuteHandPaint = new Paint() {
-    minuteHandPaint.color = const Color(0xffc5cbdd);
+    minuteHandPaint.color = Color(0xffc5cbdd);
     minuteHandPaint.style = PaintingStyle.stroke;
+    minuteHandPaint.strokeWidth = 8.0;
     minuteHandPaint.strokeCap = StrokeCap.round;
-    minuteHandPaint.strokeWidth = 5.0;
+
   }
 
   @override
@@ -28,8 +29,8 @@ class MinuteHandPainter extends CustomPainter {
     path.moveTo(0.0, -radius * 0.75);
     path.lineTo(0.0, radius * 0.1);
 
-    path.close();
-
+    //path.close();
+    //minuteHandPaint.strokeCap = StrokeCap.round;
     canvas.drawPath(path, minuteHandPaint);
     canvas.drawShadow(path, Colors.black, 4.0, false);
 

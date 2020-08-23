@@ -120,16 +120,21 @@ String _repeatTime(clockunit clockAdd){
 }
 
 //主页的State
-class _AlarmState extends State<Alarm> {
+class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
   //保存时钟列表
   var clocklists = new List<clockunit>();
   //音频播放器，用于播放铃声
   AudioPlayer audioPlayer=new AudioPlayer();
   //MP3文件路径
-  final mp3LocalPath="assets/ringtone/clockmusic.mp3";
+  final mp3LocalPath="ringtone/clockmusic.mp3";
   //计时器1,2  1用于获取整分，这样2可以每一分钟才回调一次，节约资源
   Timer _timer1;
   Timer _timer2;
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
+
 
   //获取文件路径
   Future<File> _getLoaclFile() async {
@@ -149,7 +154,7 @@ class _AlarmState extends State<Alarm> {
       // 使用给定的编码将整个文件内容读取为字符串
       List<String> contents = await file.readAsLines();
 
-      print(contents);
+      //print(contents);
 
       //有时候读出来为null，不知道是不是搞错了，这样保险一点
       if (contents == null) {
@@ -158,7 +163,7 @@ class _AlarmState extends State<Alarm> {
       } else {
 
         int length = contents.length;
-        print("the length is $length");
+        //print("the length is $length");
         //先把原有的清空
         clocklists.clear();
         //将读出的内容用于构造闹钟列表
@@ -240,7 +245,7 @@ class _AlarmState extends State<Alarm> {
         //必须闹钟是处于工作状态，每天都是重复的或者今天是重复的一天，小时数和分钟数和现在的时间对得上
           {
         //弹出窗口，播放铃声
-        print("时间到！");
+        //print("时间到！");
         //audioPlayer.play(mp3LocalPath,isLocal: true);
         //弹窗
         showDialog(
@@ -269,15 +274,15 @@ class _AlarmState extends State<Alarm> {
             ));
         //结束计数(有待考虑，或许不用结束！)
       }else{
-        print("第$i个不符合条件！");
+        //print("第$i个不符合条件！");
       }
     }
   }
   void startTimer2(){
     const period= const Duration(minutes: 1);
-    print("我是startTimer2()，启动计时器2！");
-    print("时间：");
-    print(DateTime.now());
+    //print("我是startTimer2()，启动计时器2！");
+    //print("时间：");
+    //print(DateTime.now());
 
     //首先查询一次
     showAlter();
@@ -303,13 +308,13 @@ class _AlarmState extends State<Alarm> {
     var myseconds=60;
     _timer1 = Timer.periodic(period, (timer) {
       myseconds--;
-      print("mysecons is $myseconds");
+      //print("myseconds is $myseconds");
 
       if (DateTime.now().second == 0) {
         //整分，打开第二个计时器
         startTimer2();
-        print(DateTime.now());
-        print("已启动计时器2！");
+        //print(DateTime.now());
+        //print("已启动计时器2！");
         //取消定时器1
         cancelTime1();
       }
@@ -338,7 +343,7 @@ class _AlarmState extends State<Alarm> {
 
     _readFile().then((value) {
       setState(() {
-        print("初始化刷新状态！");
+        //print("初始化刷新状态！");
       });
     });
     startTimer1();
@@ -354,7 +359,7 @@ class _AlarmState extends State<Alarm> {
       ),
     );
     setState(() {
-      print("删除闹钟后刷新状态！");
+      //print("删除闹钟后刷新状态！");
     });
     //传回数据后再次写入文件中。
     _writeFile();
@@ -426,7 +431,9 @@ class _AlarmState extends State<Alarm> {
         clocklists[clocki].getHourString() +
             ":" +
             clocklists[clocki].getMinuteString(),
-        style: TextStyle(fontSize: 35),
+        style: TextStyle(fontSize: 35,
+            color:Color(0xff2d386b)
+        ),
         textAlign: TextAlign.left,
       ),
       //重复频率
@@ -441,8 +448,7 @@ class _AlarmState extends State<Alarm> {
             //每次点击开关之后要更新状态
             setState(() {
               clocklists[clocki].onwork = !clocklists[clocki].onwork;
-              print(
-                  "the $clocki is " + clocklists[clocki].onwork.toString());
+              //print("the $clocki is " + clocklists[clocki].onwork.toString());
             });
           }),
     );
@@ -458,11 +464,13 @@ class _AlarmState extends State<Alarm> {
       ),
     );
     setState(() {
-      print("传回数据后刷新状态！");
+      //print("传回数据后刷新状态！");
     });
     //传回数据后再次写入文件中。
     _writeFile();
   }
+
+
 }
 //添加闹钟的页面
 class ClockSettingPage extends StatefulWidget {
@@ -595,7 +603,7 @@ class ClockSettingPageState extends State<ClockSettingPage> {
   void initState() {
     super.initState();
     clockAdd = new clockunit(initjson);
-    print("clockAdd has been init!");
+    //print("clockAdd has been init!");
   }
   //界面的主要内容
   @override
@@ -736,7 +744,7 @@ class ClockSettingPageState extends State<ClockSettingPage> {
     }
     //刷新状态
     setState(() {
-      print("第$index 个按钮按下！");
+      //print("第$index 个按钮按下！");
     });
   }
   //小时选择器
@@ -744,10 +752,10 @@ class ClockSettingPageState extends State<ClockSettingPage> {
     //套一个Listener，监听onPointerUp动作，每当手离开选择器，便更改闹钟的hour属性，并跳转到离偏移量最近的一项中
     return new Listener(
       onPointerUp: (event) {
-        print("point is up hour");
+        //print("point is up hour");
         //获得此时的小时数
         clockAdd.hour = ((controller1.offset / itemHeight).round() % 24).abs();
-        print(clockAdd.hour);
+        //print(clockAdd.hour);
         //跳转到距离偏移量最近的一项上
         controller1.jumpTo(
             ((controller1.offset / itemHeight)).round() * itemHeight * 1.0);
@@ -777,11 +785,11 @@ class ClockSettingPageState extends State<ClockSettingPage> {
     //套一个Listener，监听onPointerUp动作，每当手离开选择器，便更改闹钟的hour属性，并跳转到离偏移量最近的一项中
     return new Listener(
       onPointerUp: (event) {
-        print("point is up Minute");
+        //print("point is up Minute");
         //获得此时的分钟数
         clockAdd.minute =
             ((controller2.offset / itemHeight).round() % 60).abs();
-        print(clockAdd.minute);
+        //print(clockAdd.minute);
         //跳转到距离偏移量最近的一项中
         controller2.jumpTo(
             ((controller2.offset / itemHeight)).round() * itemHeight * 1.0);
@@ -844,7 +852,7 @@ class ClockEditPageState extends State<ClockEditPage>{
     //flagSelectAll初始为true，表示此时按全选就会全部选中
     flagSelectAll=true;
     setState(() {
-      print("删除闹钟界面初始化！");
+      //print("删除闹钟界面初始化！");
     });
   }
 
@@ -899,7 +907,9 @@ class ClockEditPageState extends State<ClockEditPage>{
           clocklists[clocki].getHourString() +
               ":" +
               clocklists[clocki].getMinuteString(),
-          style: TextStyle(fontSize: 35),
+          style: TextStyle(fontSize: 35,
+            color:  Color(0xff2d386b),
+          ),
           textAlign: TextAlign.left,
         ),
         subtitle: Text(
@@ -923,24 +933,24 @@ class ClockEditPageState extends State<ClockEditPage>{
     }
     flagSelectAll=!flagSelectAll;
     setState(() {
-      print("选择了全部！");
+      //print("选择了全部！");
     });
   }
   //取消删除，返回到主界面
   void _cancelToHome(){
-    print("取消删除，从删除界面返回到主界面！");
+    //print("取消删除，从删除界面返回到主界面！");
     Navigator.pop(context,clocklists);
   }
   //删除所选择的项，并且退回到主界面
   void _deleteToHome(){
-    print("开始删除，从删除界面返回到主界面！");
+    //print("开始删除，从删除界面返回到主界面！");
     for(var i=0,j=0;i<deletSelectList.length;i++,j++){
       if(deletSelectList[i]){
         clocklists.removeAt(j--);//j--是因为，删除某项之后，后面的项会前移
       }
     }
     int length=clocklists.length;
-    print("删除之后还有$length个闹钟！");
+    //print("删除之后还有$length个闹钟！");
     Navigator.pop(context,clocklists);
   }
 }

@@ -6,12 +6,12 @@ import 'package:flutter/material.dart';
 class ClockDialPainter extends CustomPainter {
   final clockText;
 
-  final hourTickMarkLength = 15.0;
-  final minuteTickMarkLength = 10.0;
+  final hourTickMarkLength = 18.0;
+  final minuteTickMarkLength = 13.0;
 
   final hourTickMarkWidth = 5.0;
   final minuteTickMarkWidth = 3.5;
-
+  final offset = 8;
   final Paint tickPaint;
   final TextPainter textPainter;
   final TextStyle textStyle;
@@ -55,10 +55,10 @@ class ClockDialPainter extends CustomPainter {
     final radius = size.width / 2 ;
     canvas.save();
 
-    // drawing
+    //绘制表盘
     canvas.translate(radius, radius);
     for (var i = 0; i < 60; i++) {
-      //make the length and stroke of the tick marker longer and thicker depending
+      //小时刻度更长
       if((i%5) == 0){
         tickMarkLength = hourTickMarkLength;
         tickPaint.strokeWidth = hourTickMarkWidth;
@@ -70,10 +70,8 @@ class ClockDialPainter extends CustomPainter {
         tickPaint.strokeWidth = minuteTickMarkWidth;
         tickPaint.color = Colors.white;
       }
-      //tickMarkLength = tickLength;
-      //tickPaint.strokeWidth = tickWidth;
-      canvas.drawLine(new Offset(0.0, -radius),
-          new Offset(0.0, -radius + tickMarkLength), tickPaint);
+      canvas.drawLine(new Offset(0.0, -radius - offset),
+          new Offset(0.0, -radius + tickMarkLength - offset), tickPaint);
 
       canvas.rotate(angle);
     }
