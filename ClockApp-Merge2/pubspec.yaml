@@ -49,6 +49,8 @@ flutter:
   assets:
     - assets/ringtone/clockmusic.mp3
     - assets/image/plane.jpg
+    - assets/image/墨水.jpg
+    - assets/image/星星.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 

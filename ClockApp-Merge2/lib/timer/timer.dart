@@ -81,14 +81,14 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
         leading:new Icon(Icons.access_alarm),
       ),
       body: new Container(
-          height: ScreenUtil().setHeight(1900),
+          height: ScreenUtil().setHeight(1650),
           width: ScreenUtil().setWidth(1080),
           margin:   EdgeInsets.fromLTRB(ScreenUtil().setWidth(0), ScreenUtil().setHeight(0), ScreenUtil().setWidth(0), ScreenUtil().setHeight(0)),
           padding:  EdgeInsets.all(ScreenUtil().setWidth(16)),
           decoration: new BoxDecoration(
             //border: new Border.all(color: Colors.red),
             image: DecorationImage(
-              image: AssetImage("assets/image/plane.jpg"),
+              image: AssetImage("assets/image/墨水.jpg"),
               fit: BoxFit.cover,
             ),
           ),
@@ -99,7 +99,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> {
                 decoration: new BoxDecoration(
                   //border: new Border.all(color: Colors.red),
                 ),
-                height: ScreenUtil().setHeight(1450),
+                height: ScreenUtil().setHeight(1250),
                 width: ScreenUtil().setWidth(1080),
                 child: TimerApp(),
               ),
@@ -238,7 +238,7 @@ class _RollingSwitchState extends State<RollingSwitch>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
-                    image: AssetImage("assets/image/plane.jpg"),
+                    image: AssetImage("assets/image/星星.png"),
                     fit: BoxFit.cover,
                   ),
                 ),
