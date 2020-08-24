@@ -1,7 +1,5 @@
-import 'clock_text.dart';
 import 'package:flutter/material.dart';
-import 'clock_dial_painter.dart';
-import 'clock_hands.dart';
+
 
 class ClockFace extends StatelessWidget{//绘制表盘
 

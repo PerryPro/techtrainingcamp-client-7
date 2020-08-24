@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'clock_dial_painter.dart';
 import 'clock_hands.dart';
-import 'clock_text.dart';
 import 'package:flutter/material.dart';
 import 'clock_face.dart';
 import 'package:shared_preferences/shared_preferences.dart';

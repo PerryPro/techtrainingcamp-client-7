@@ -1,6 +1,4 @@
 import 'dart:math';
-
-import 'clock_text.dart';
 import 'package:flutter/material.dart';
 
 class ClockDialPainter extends CustomPainter {//绘制刻度
