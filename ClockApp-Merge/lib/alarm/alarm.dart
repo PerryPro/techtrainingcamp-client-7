@@ -620,7 +620,7 @@ class ClockSettingPageState extends State<ClockSettingPage> {
             leading: new FlatButton(
                 onPressed: _cancelToHome,
                 child:
-                Icon(Icons.cancel,color: Colors.white,)
+                Icon(Icons.close,color: Colors.white,)
 //                new Text(
 //                  "取消",
 //                  textAlign: TextAlign.left,
@@ -630,7 +630,7 @@ class ClockSettingPageState extends State<ClockSettingPage> {
               //点击添加
               new FlatButton(
                   onPressed: _finishToHome,
-                  child: Icon(Icons.check_circle,color: Colors.white,)
+                  child: Icon(Icons.check,color: Colors.white,)
                   //new Text("完成")
               )
               ,
@@ -884,7 +884,7 @@ class ClockEditPageState extends State<ClockEditPage>{
 
                   )),
               actions: <Widget>[
-                new FlatButton(onPressed: _cancelToHome, child: Icon(Icons.cancel,color: Colors.white,)),
+                new FlatButton(onPressed: _cancelToHome, child: Icon(Icons.close,color: Colors.white,)),
               ],
             ),
             floatingActionButton: FloatingActionButton(

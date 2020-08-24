@@ -16,7 +16,7 @@ class FirstTab extends StatelessWidget {
         body: Center(
             child: ListView(children: <Widget>[
           SizedBox(
-            //用于前面空行
+            //用于前面空白
             height: 30,
           ),
           Padding(
@@ -24,7 +24,7 @@ class FirstTab extends StatelessWidget {
             child: Clock(),
           ),
           SizedBox(
-            //后面与文字之间的空行
+            //后面与文字之间的空白
             height: 55,
           ),
           NumClock()

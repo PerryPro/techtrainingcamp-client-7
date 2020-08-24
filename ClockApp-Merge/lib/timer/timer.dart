@@ -311,14 +311,18 @@ class _TimerAppState extends State<TimerApp> with AutomaticKeepAliveClientMixin{
               ),
               color:Color.fromARGB(255, 119, 136, 213),
 
-              child: Text(
-                  _active ? '停止' : '开始',
-                  style: TextStyle(
-                    color: Colors.white,
-                fontSize: 25,
-                //fontWeight: FontWeight.w700
-                  )
-              ),
+              child:
+              _active ? Icon(Icons.pause,color: Colors.white,size: 40,) : Icon(Icons.play_arrow,color: Colors.white,size: 40,),
+
+
+//              Text(
+//                  _active ? '停止' : '开始',
+//                  style: TextStyle(
+//                    color: Colors.white,
+//                fontSize: 25,
+//                //fontWeight: FontWeight.w700
+//                  )
+//              ),
               onPressed: press,
             ),
           ),
