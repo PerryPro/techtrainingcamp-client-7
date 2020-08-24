@@ -165,7 +165,7 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "\t\t\t  当前时间",
+                  "\t\t\t\t\t\t\t\t\t  日期",
                   style: TextStyle(
                       color: Color(0xffff0863),
                       fontSize: 15,
@@ -175,7 +175,7 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
                 ),
                 SizedBox(height: 10,),
                 Text(
-                  "$time",
+                  "$day",
                   style: TextStyle(
                       color: Color(0xff2d386b),
                       fontSize: 30,
@@ -188,7 +188,7 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  "\t\t\t  日期",
+                  "\t\t\t  当前时间",
                   style: TextStyle(
                       color: Color(0xffff0863),
                       fontSize: 15,
@@ -198,7 +198,7 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
                 ),
                 SizedBox(height: 10,),
                 Text(
-                  "$day",
+                  "$time",
                   style: TextStyle(
                       color: Color(0xff2d386b),
                       fontSize: 30,
