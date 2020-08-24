@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 typedef TimeProducer = DateTime Function();
 
-class Clock extends StatefulWidget {
+class Clock extends StatefulWidget {//模拟时钟
   final Color circleColor;
   final Color shadowColor;
 
@@ -34,7 +34,7 @@ class Clock extends StatefulWidget {
   }
 }
 
-class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{//模拟时钟
+class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
   Timer _timer;
   DateTime dateTime;
   static String time;
