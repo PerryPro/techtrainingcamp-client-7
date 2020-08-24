@@ -11,16 +11,12 @@ typedef TimeProducer = DateTime Function();
 class Clock extends StatefulWidget {//模拟时钟
   final Color circleColor;
   final Color shadowColor;
-
-  //final ClockText clockText;
-
   final TimeProducer getCurrentTime;
   final Duration updateDuration;
 
   Clock(
       {this.circleColor = const Color(0xfffe1ecf7),
       this.shadowColor = const Color(0xffd9e2ed),
-      //this.clockText = ClockText.arabic,
       this.getCurrentTime = getSystemTime,
       this.updateDuration = const Duration(seconds: 1)});
 
@@ -51,8 +47,6 @@ class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
     setState(() {
       dateTime = new DateTime.now();
       time = dateTime.toString().substring(11,19);
-
-      //print(time);
     });
   }
 
