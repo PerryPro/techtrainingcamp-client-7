@@ -5,8 +5,6 @@ class ThirdTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    //return MyTimer();
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

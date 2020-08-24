@@ -24,14 +24,6 @@ bool roll=false;
 //对第一个按钮状态的控制，false代表停止中，true代表运行中
 bool _active=false;
 
-//class MyApp extends StatelessWidget {
-//  @override
-//  Widget build(BuildContext context) {
-//    return MaterialApp(
-//      home: BasicAppBarSample(),
-//    );
-//  }
-//}
 
 //主界面
 class BasicAppBarSample extends StatefulWidget {
@@ -78,7 +70,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
         // elevation: 0,///设置AppBar透明，必须设置为0
         title: Text('计时器',style: TextStyle(color: Colors.white,fontSize:ScreenUtil().setSp(55)),),
         backgroundColor: Color.fromARGB(255, 119, 136, 213),
-        leading:new Icon(Icons.access_alarm),
+        leading:new Icon(Icons.timer),
       ),
       body: new Container(
           height: ScreenUtil().setHeight(1650),
@@ -122,12 +114,6 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
-
-//
-//void main() {
-//
-//  runApp(new MyApp());
-//}
 
 
 //下面的滚动小球

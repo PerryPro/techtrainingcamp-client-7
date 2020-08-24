@@ -13,7 +13,7 @@ class Clock extends StatefulWidget {
   final Color circleColor;
   final Color shadowColor;
 
-  final ClockText clockText;
+  //final ClockText clockText;
 
   final TimeProducer getCurrentTime;
   final Duration updateDuration;
@@ -21,7 +21,7 @@ class Clock extends StatefulWidget {
   Clock(
       {this.circleColor = const Color(0xfffe1ecf7),
       this.shadowColor = const Color(0xffd9e2ed),
-      this.clockText = ClockText.arabic,
+      //this.clockText = ClockText.arabic,
       this.getCurrentTime = getSystemTime,
       this.updateDuration = const Duration(seconds: 1)});
 
@@ -35,10 +35,10 @@ class Clock extends StatefulWidget {
   }
 }
 
-class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
+class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{//模拟时钟
   Timer _timer;
   DateTime dateTime;
-  static String time;//pyz
+  static String time;
   @override
   void initState() {
     super.initState();
@@ -51,7 +51,7 @@ class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
   void setTime(Timer timer) {
     setState(() {
       dateTime = new DateTime.now();
-      time = dateTime.toString().substring(11,19);//pyz
+      time = dateTime.toString().substring(11,19);
 
       //print(time);
     });
@@ -95,14 +95,14 @@ class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
       child: Stack(
         children: <Widget>[
           new ClockFace(
-            clockText: widget.clockText,
+            //clockText: widget.clockText,
             dateTime: dateTime,
           ),
           Container(
             padding: EdgeInsets.all(25),
             width: double.infinity,
             child: new CustomPaint(
-              painter: new ClockDialPainter(clockText: widget.clockText),
+              painter: new ClockDialPainter(),
             ),
           ),
           new ClockHands(dateTime: dateTime),
@@ -118,7 +118,7 @@ class _Clock extends State<Clock> with AutomaticKeepAliveClientMixin{
   bool get wantKeepAlive => true;
 }
 
-class NumClock extends StatefulWidget {
+class NumClock extends StatefulWidget {//数字时钟
 
 
   final Duration updateDuration;
@@ -137,19 +137,8 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
 
   Timer _timer;
   DateTime dateTime;
-  static String time;//pyz
-  static String timeutc;//pyz
-  static int TimeZone;
-
-//  void getTimeZone() async{
-//    var prefs = await SharedPreferences.getInstance();
-//    TimeZone = prefs.getInt("TZ") ?? -100;
-//  }
-//  void setTimeZone() async{
-//    var prefs = await SharedPreferences.getInstance();
-//    if(TimeZone != -100)prefs.setInt("TZ", TimeZone);
-//  }
-
+  static String time;//时间
+  static String day;//日期
   @override
   void initState() {
     super.initState();
@@ -158,20 +147,13 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
     this._timer = new Timer.periodic(widget.updateDuration, setTime);
 
     time = dateTime.toString().substring(11,19);
-    timeutc = dateTime.toUtc().toString().substring(11,19);
+    day = dateTime.toString().substring(0,10);
   }
   void setTime(Timer timer) {
     setState(() {
       dateTime = new DateTime.now();
       time = dateTime.toString().substring(11,19);
-      timeutc = dateTime.toUtc().toString().substring(11,19);
-//      if(TimeZone == -100) {
-//        var t = dateTime.toString().substring(11,19);
-//        TimeZone = int.parse(time.substring(0,2)) - int.parse(timeutc.substring(0,2));
-//        if(TimeZone != -100) setTimeZone();
-//      }
-//      time = ((int.parse(timeutc.substring(0,2)) + TimeZone)%24).toString() + timeutc.substring(2,8);//pyz
-
+      day = dateTime.toString().substring(0,10);
       //print(time);
     });
   }
@@ -209,30 +191,29 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
                 )
               ],
             ),
-//            Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: <Widget>[
-//                Text(
-//                  "\t\t\t  UTC时间 TimeZone:$TimeZone",
-//                  style: TextStyle(
-//                      color: Color(0xffff0863),
-//                      fontSize: 15,
-//                      fontWeight: FontWeight.w700,
-//                      letterSpacing: 1.3
-//                  ),
-//                ),
-//                SizedBox(height: 10,),
-//                Text(
-//                  "$timeutc",
-//                  style: TextStyle(
-//                      color: Color(0xff2d386b),
-//                      fontSize: 30,
-//                      fontWeight: FontWeight.w700
-//                  ),
-//                )
-//              ],
-//            ),
-
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  "\t\t\t  日期",
+                  style: TextStyle(
+                      color: Color(0xffff0863),
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.3
+                  ),
+                ),
+                SizedBox(height: 10,),
+                Text(
+                  "$day",
+                  style: TextStyle(
+                      color: Color(0xff2d386b),
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700
+                  ),
+                )
+              ],
+            ),
           ],
         );
   }

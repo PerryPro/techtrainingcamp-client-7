@@ -382,7 +382,7 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
               textColor: Colors.white,
               //根据是否有闹钟选择是否开放按钮动作和显示文字
               onPressed: clocklists.length != 0 ? _editClock : null,
-              child: Text(clocklists.length != 0 ? "删除" : ""),
+              child: clocklists.length != 0 ?Icon(Icons.delete_outline,color: Colors.white,):Text( ""),
             ),
             new IconButton(
                 icon: new Icon(Icons.add_alarm), onPressed: _clockSetting)
@@ -619,13 +619,21 @@ class ClockSettingPageState extends State<ClockSettingPage> {
             //点击取消
             leading: new FlatButton(
                 onPressed: _cancelToHome,
-                child: new Text(
-                  "取消",
-                  textAlign: TextAlign.left,
-                )),
+                child:
+                Icon(Icons.cancel,color: Colors.white,)
+//                new Text(
+//                  "取消",
+//                  textAlign: TextAlign.left,
+//                )
+          ),
             actions: <Widget>[
               //点击添加
-              new FlatButton(onPressed: _finishToHome, child: new Text("完成")),
+              new FlatButton(
+                  onPressed: _finishToHome,
+                  child: Icon(Icons.check_circle,color: Colors.white,)
+                  //new Text("完成")
+              )
+              ,
             ],
           ),
           body: Flex(//设置好时间选择器，重复频率显示，重复频率选择器的页面布局
@@ -867,14 +875,16 @@ class ClockEditPageState extends State<ClockEditPage>{
               backgroundColor: Color.fromARGB(255, 119, 136, 213), //设置背景颜色
               centerTitle: true,
               automaticallyImplyLeading: false, //设置没有返回按钮
-              leading: new FlatButton(
+              leading: new Container(
+                  width: 200,
+                  child:FlatButton(
                   onPressed: _selectAll,
-                  child: new Text(
-                    "全选",
-                    textAlign: TextAlign.left,
+                  child:
+                      Icon(Icons.check_circle_outline,color: Colors.white,)
+
                   )),
               actions: <Widget>[
-                new FlatButton(onPressed: _cancelToHome, child: new Text("取消")),
+                new FlatButton(onPressed: _cancelToHome, child: Icon(Icons.cancel,color: Colors.white,)),
               ],
             ),
             floatingActionButton: FloatingActionButton(

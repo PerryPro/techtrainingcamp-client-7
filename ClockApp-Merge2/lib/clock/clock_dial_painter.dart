@@ -3,8 +3,8 @@ import 'dart:math';
 import 'clock_text.dart';
 import 'package:flutter/material.dart';
 
-class ClockDialPainter extends CustomPainter {
-  final clockText;
+class ClockDialPainter extends CustomPainter {//绘制刻度
+  //final clockText;
 
   final hourTickMarkLength = 18.0;
   final minuteTickMarkLength = 13.0;
@@ -16,25 +16,7 @@ class ClockDialPainter extends CustomPainter {
   final TextPainter textPainter;
   final TextStyle textStyle;
 
-  //final double tickLength = 8.0;
-  //final double tickWidth = 3.0;
-
-  final romanNumeralList = [
-    'XII',
-    'I',
-    'II',
-    'III',
-    'IV',
-    'V',
-    'VI',
-    'VII',
-    'VIII',
-    'IX',
-    'X',
-    'XI'
-  ];
-
-  ClockDialPainter({this.clockText = ClockText.roman})
+  ClockDialPainter()
       : tickPaint = new Paint(),
         textPainter = new TextPainter(
           textAlign: TextAlign.center,
@@ -55,7 +37,7 @@ class ClockDialPainter extends CustomPainter {
     final radius = size.width / 2 ;
     canvas.save();
 
-    //绘制表盘
+
     canvas.translate(radius, radius);
     for (var i = 0; i < 60; i++) {
       //小时刻度更长
