@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-
+//时针、分针和秒针的绘制
 class HourHandPainter extends CustomPainter {
   final Paint hourHandPaint;
   int hours;

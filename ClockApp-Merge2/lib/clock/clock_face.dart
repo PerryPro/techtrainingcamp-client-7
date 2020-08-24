@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 class ClockFace extends StatelessWidget{//绘制表盘
 
   final DateTime dateTime;
-  //final ClockText clockText;
   ClockFace({ this.dateTime});
 
   @override

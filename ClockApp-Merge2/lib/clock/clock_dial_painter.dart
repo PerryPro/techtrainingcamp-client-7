@@ -2,8 +2,6 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 
 class ClockDialPainter extends CustomPainter {//绘制刻度
-  //final clockText;
-
   final hourTickMarkLength = 18.0;
   final minuteTickMarkLength = 13.0;
 
