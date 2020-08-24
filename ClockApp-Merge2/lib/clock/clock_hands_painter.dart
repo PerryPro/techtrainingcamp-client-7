@@ -18,12 +18,11 @@ class HourHandPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final radius = size.width / 2;
-    // To draw hour hand
     canvas.save();
 
     canvas.translate(radius, radius);
 
-    //checks if hour is greater than 12 before calculating rotation
+    //在计算之前先判断是否超过12点
     canvas.rotate(this.hours >= 12
         ? 2 * pi * ((this.hours - 12) / 12 + (this.minutes / 720))
         : 2 * pi * ((this.hours / 12) + (this.minutes / 720)));
@@ -70,9 +69,6 @@ class MinuteHandPainter extends CustomPainter {
     Path path = new Path();
     path.moveTo(0.0, -radius * 0.75);
     path.lineTo(0.0, radius * 0.1);
-
-    //path.close();
-    //minuteHandPaint.strokeCap = StrokeCap.round;
     canvas.drawPath(path, minuteHandPaint);
     canvas.drawShadow(path, Colors.black, 4.0, false);
 
@@ -123,9 +119,6 @@ class SecondHandPainter extends CustomPainter {
 
     canvas.drawPath(path1, secondHandPaint);
     canvas.drawPath(path2, secondHandPointsPaint);
-
-//    canvas.drawShadow(path2, Colors.black, 4.0, false);
-
     canvas.restore();
   }
 
