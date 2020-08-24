@@ -415,21 +415,21 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> wi
     //监听滚动事件，打印滚动位置
     _controller.addListener(() {
 
-      //print(_controller.offset); //打印滚动位置
-
-
-      if(_controller.offset%50==10){
-        int x=(_controller.offset/50).toInt();
-        if(widget.label=='HRS') {
-          disph=x;
-        }
-        else if(widget.label=='MIN') {
-          dispm=x;
-        }
-        else {
-          disps=x;
-        }
+      print(_controller.offset); //打印滚动位置
+      print("h"+'$disph');
+      print("m"+'$dispm');
+      print("s"+'$disps');
+      int x=((_controller.offset+15)/50).toInt();
+      if(widget.label=='HRS') {
+        disph=x;
       }
+      else if(widget.label=='MIN') {
+        dispm=x;
+      }
+      else {
+        disps=x;
+      }
+
 
 
     }
@@ -476,13 +476,14 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> wi
 
         if(_active==true) {
           if (widget.label == 'HRS') {
-            if (disph > 0&&count==0)
-              _controller.animateTo(10.0,
-                  duration: Duration(hours: disph),
+            if (disph > 0&&disps==0&&dispm==0)
+              _controller.animateTo(_controller.offset-50,
+                  duration: Duration(seconds: 3),
                   curve: Curves.linear
               );
           }
           else if (widget.label == 'MIN') {
+            /*
             if (dispm > 0&&count==0) {
               _controller.animateTo(10.0,
                   duration: Duration(minutes: dispm),
@@ -498,28 +499,40 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> wi
                   curve: Curves.linear
               );
               count=-60;x=1;
-            }
+            }*/
+            if(dispm>0&&disps==0) {
+                _controller.animateTo(_controller.offset-50,
+                    duration: Duration(seconds: 3),
+                    curve: Curves.linear
+                );
+              }
+            else if(disph>0&&dispm==0&&disps==0)
+              {
+                _controller.jumpTo(3000,
+                );
+                _controller.animateTo(2960,
+                    duration: Duration(seconds: 3),
+                    curve: Curves.linear
+                );
+              }
           }
 
           else if (widget.label == 'SEC') {
-            if (disps > 0&&count==0) {
-              _controller.animateTo(10.0,
-                  duration: Duration(seconds: disps),
+            if (disps > 0) {
+              _controller.animateTo(_controller.offset-50,
+                  duration: Duration(seconds: 1),
                   curve: Curves.linear
               );
             }
             else if ((disph > 0 || dispm > 0)&&disps==0) {
-
               _controller.jumpTo(3000,
               );
               _controller.animateTo(2960,
                   duration: Duration(microseconds: 800),
                   curve: Curves.linear
               );
-              count=-1;
             }
           }
-          count++;
         }
         if(_active==false) {
           count=0;
