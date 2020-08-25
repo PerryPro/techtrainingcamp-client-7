@@ -162,10 +162,10 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "\t\t\t\t\t\t\t\t\t  日期",
+                  "日期",
                   style: TextStyle(
                       color: Color(0xffff0863),
                       fontSize: 15,
@@ -185,10 +185,10 @@ class _NumClock extends State<NumClock> with AutomaticKeepAliveClientMixin{
               ],
             ),
             Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
-                  "\t\t\t  当前时间",
+                  "当前时间",
                   style: TextStyle(
                       color: Color(0xffff0863),
                       fontSize: 15,
