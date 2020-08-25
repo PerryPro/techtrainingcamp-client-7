@@ -1,4 +1,4 @@
-package com.example.clock_app;
+package com.example.flutter_clock;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

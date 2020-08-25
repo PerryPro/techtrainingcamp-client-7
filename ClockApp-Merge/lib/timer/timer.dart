@@ -3,13 +3,17 @@
 背景填充在78行
 */
 import 'dart:ui';
-
+import 'dart:io';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:audioplayers/audioplayers.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 //计算总时间
 int time=20;
 
@@ -32,7 +36,109 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
   //用来检查是否滚动过
   Timer timer;
   static const duration = const Duration(seconds: 1);
+  AudioPlayer audioPlayer = AudioPlayer();
+  String mp3Uri;
+  int x=-1;
+  //通知栏变量
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
+  @override
+  void initState() {
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings, onSelectNotification: null);
+    _load();
+  }
+  //通知栏模式
+  Future onSelectNotification(String payload) {
+    debugPrint("payload : $payload");
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text('Notification'),
+        content: new Text('$payload'),
+      ),
+    );
+  }
+  //显示通知栏
+  showNotification() async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High,importance: Importance.Max
+    );
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(
+        0, '计时器时间到！', '', platform,
+        payload: '计时器时间到！');
+
+
+  }
+
+  Future<Null> _load() async {
+    final ByteData data = await rootBundle.load('assets/ringtone/法老.mp3');
+    Directory tempDir = await getTemporaryDirectory();
+    File tempFile = File('${tempDir.path}/法老.mp3');
+    await tempFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
+    mp3Uri = tempFile.uri.toString();
+    print('finished loading, uri=$mp3Uri');
+  }
+
+  play() async {
+    int result = await audioPlayer.play(mp3Uri, isLocal: true);
+    if (result == 1) {
+      // success
+      print('play success');
+    } else {
+      print('play failed');
+    }
+  }
+  @override
+  void deactivate() async{
+    print('结束');
+    int result = await audioPlayer.release();
+    if (result == 1) {
+      print('release success');
+    } else {
+      print('release failed');
+    }
+    super.deactivate();
+  }
+
+
+  void tanchu()
+  {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context)
+      {
+        return new AlertDialog(
+          title: new Text('提示'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('定时结束'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('确定'),
+              onPressed: () {
+                deactivate();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    ).then((val) {
+      print(val);
+    });
+  }
   //滚动之后应该怎么办
   void wan() {
     setState(() {
@@ -46,11 +152,28 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
       timer = Timer.periodic(duration , (Timer t) {
         if(disph==0&&dispm==0&&disps==0) {
           roll=true;
+          if(x==0) {
+            play();
+            tanchu();
+            showNotification();
+            x=1;
+          }
+        }
+        else if(_active=true) {
+          x=0;
         }
         if(roll==true) {
           _active=false;
           wan();
         };
+        if(x>0) {
+          x++;
+          if(x==10)
+          {
+            deactivate();
+            x=-1;
+          }
+        }
       });
     }
 
@@ -363,8 +486,8 @@ class CustomTextContainer extends StatelessWidget {
           Text(
             "$label",
             style: TextStyle(
-              color: Colors.white70,
-              fontSize: 18
+                color: Colors.white70,
+                fontSize: 18
             ),
           )
         ],
@@ -491,20 +614,20 @@ class ScrollControllerTestRouteState extends State<ScrollControllerTestRoute> wi
               count=-60;x=1;
             }*/
             if(dispm>0&&disps==0) {
-                _controller.animateTo(_controller.offset-50,
-                    duration: Duration(seconds: 3),
-                    curve: Curves.linear
-                );
-              }
+              _controller.animateTo(_controller.offset-50,
+                  duration: Duration(seconds: 3),
+                  curve: Curves.linear
+              );
+            }
             else if(disph>0&&dispm==0&&disps==0)
-              {
-                _controller.jumpTo(3000,
-                );
-                _controller.animateTo(2960,
-                    duration: Duration(seconds: 3),
-                    curve: Curves.linear
-                );
-              }
+            {
+              _controller.jumpTo(3000,
+              );
+              _controller.animateTo(2960,
+                  duration: Duration(seconds: 3),
+                  curve: Curves.linear
+              );
+            }
           }
 
           else if (widget.label == 'SEC') {

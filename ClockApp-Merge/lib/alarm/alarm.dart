@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
@@ -128,11 +129,42 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
   //本来设计计时器1,2  1用于获取整分，这样2可以每一分钟才回调一次，节约资源（但是由于，系统有时候会休眠进程，导致时间不准，最终还是采用每秒回调)
   Timer _timer2;
+  String mp3Url;
+  AudioPlayer audioPlayer = AudioPlayer();
 
   @override
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 
+  Future<Null> _loadringtone() async {
+    final ByteData data = await rootBundle.load('assets/ringtone/法老.mp3');
+    Directory tempDir = await getTemporaryDirectory();
+    File tempFile = File('${tempDir.path}/法老.mp3');
+    await tempFile.writeAsBytes(data.buffer.asUint8List(), flush: true);
+    mp3Url = tempFile.uri.toString();
+    print('finished loading, uri=$mp3Url');
+  }
+
+  playRingtone() async {
+    int result = await audioPlayer.play(mp3Url, isLocal: true);
+    if (result == 1) {
+      // success
+      print('play success');
+    } else {
+      print('play failed');
+    }
+  }
+  @override
+  void deactivate() async{//结束铃声
+   // print('结束');
+    int result = await audioPlayer.release();
+//    if (result == 1) {
+//      print('release success');
+//    } else {
+//      print('release failed');
+//    }
+    super.deactivate();
+  }
 
   //获取文件路径
   Future<File> _getLoaclFile() async {
@@ -252,14 +284,55 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
     }
   }
 
+  void myShowDialog(String time)//pyz
+  {
+    showDialog<Null>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context)
+      {
+        return new AlertDialog(
+          title: new Text('提示'),
+          content: new SingleChildScrollView(
+            child: new ListBody(
+              children: <Widget>[
+                new Text('闹钟时间$time已到'),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text('确定'),
+              onPressed: () {
+                deactivate();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    ).then((val) {
+      print(val);
+    });
+  }
+
   //通知栏模式
   Future onSelectNotification(String payload) {
     debugPrint("payload : $payload");
     showDialog(
       context: context,
       builder: (_) => new AlertDialog(
-        title: new Text('Notification'),
+        title: new Text('提示'),
         content: new Text('$payload'),
+        actions: <Widget>[
+          new FlatButton(
+            child: new Text('确定'),
+            onPressed: () {
+              deactivate();
+              Navigator.pop(context);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -281,7 +354,9 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
         await flutterLocalNotificationsPlugin.show(
             0, '闹钟时间到', '$nowHour:$nowMinute', platform,
             payload: '闹钟时间$nowHour:$nowMinute已到！');
-
+            playRingtone();
+            myShowDialog("$nowHour:$nowMinute");
+            //pyz
         //结束计数(有待考虑，或许不用结束！)
       }
     }
@@ -298,11 +373,12 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
     //调用原initState
     super.initState();
     //通知栏初始化
+    _loadringtone();//读闹铃声音
     flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
     var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOS = new IOSInitializationSettings();
     var initSetttings = new InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initSetttings, onSelectNotification: onSelectNotification);
+    flutterLocalNotificationsPlugin.initialize(initSetttings, onSelectNotification: null);
     //读闹钟记录
     _readFile().then((value) {
       setState(() {
