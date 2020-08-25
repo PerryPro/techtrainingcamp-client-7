@@ -4,6 +4,7 @@ import 'dart:io';
 import 'dart:async';
 import 'package:path_provider/path_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -123,12 +124,9 @@ String _repeatTime(clockunit clockAdd){
 class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
   //保存时钟列表
   var clocklists = new List<clockunit>();
-  //音频播放器，用于播放铃声
-  AudioPlayer audioPlayer=new AudioPlayer();
-  //MP3文件路径
-  final mp3LocalPath="ringtone/clockmusic.mp3";
-  //计时器1,2  1用于获取整分，这样2可以每一分钟才回调一次，节约资源
-  Timer _timer1;
+  //通知栏变量
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  //本来设计计时器1,2  1用于获取整分，这样2可以每一分钟才回调一次，节约资源（但是由于，系统有时候会休眠进程，导致时间不准，最终还是采用每秒回调)
   Timer _timer2;
 
   @override
@@ -154,7 +152,6 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
       // 使用给定的编码将整个文件内容读取为字符串
       List<String> contents = await file.readAsLines();
 
-      //print(contents);
 
       //有时候读出来为null，不知道是不是搞错了，这样保险一点
       if (contents == null) {
@@ -163,7 +160,7 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
       } else {
 
         int length = contents.length;
-        //print("the length is $length");
+
         //先把原有的清空
         clocklists.clear();
         //将读出的内容用于构造闹钟列表
@@ -236,117 +233,83 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
     }
   }
 
-  //显示弹窗和播放音频，计时器需要用到
-  void showAlter(){
-    //查询每一个闹钟是否符合条件
-    for(var i=0;i<clocklists.length;i++){
-      if(clocklists[i].onwork && (clocklists[i].everyday || clocklists[i].dayslist[DateTime.now().weekday%7])
-          && clocklists[i].hour==DateTime.now().hour && clocklists[i].minute==DateTime.now().minute)
-        //必须闹钟是处于工作状态，每天都是重复的或者今天是重复的一天，小时数和分钟数和现在的时间对得上
-          {
-        //弹出窗口，播放铃声
-        //print("时间到！");
-        //audioPlayer.play(mp3LocalPath,isLocal: true);
-        //弹窗
-        showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: Text('Clock Time'),
-              content: Text(('Time is up')),
-              actions: <Widget>[
-                new FlatButton(
-                  child: new Text("取消"),
-                  onPressed: () {
-                    //audioPlayer.pause();
-                    //audioPlayer.dispose();
-                    Navigator.of(context).pop();
-                  },
-                ),
-                new FlatButton(
-                  child: new Text("确定"),
-                  onPressed: () {
-                    //audioPlayer.pause();
-                    //audioPlayer.dispose();
-                    Navigator.of(context).pop();
-                  },
-                ),
-              ],
-            ));
-        //结束计数(有待考虑，或许不用结束！)
-      }else{
-        //print("第$i个不符合条件！");
-      }
-    }
-  }
-  void startTimer2(){
-    const period= const Duration(minutes: 1);
-    //print("我是startTimer2()，启动计时器2！");
-    //print("时间：");
-    //print(DateTime.now());
-
+ //打开计时器
+  void startTimer(){
+    const period= const Duration(seconds: 1);
     //首先查询一次
-    showAlter();
-
+    showNotification();
     _timer2=Timer.periodic(period, (timer){
-      //之后每一分钟查询一次
-      showAlter();
+      //之后每一秒钟查询一次
+      showNotification();
     });
   }
 
   //取消定时器2
-  void cancelTimer2(){
+  void cancelTimer(){
     if (_timer2 != null) {
       _timer2.cancel();
       _timer2 = null;
     }
   }
 
-  //打开计时器1
-  void startTimer1(){
-    //每秒查询一次，为计数器二矫正为整分调用
-    const period= const Duration(seconds: 1);
-    var myseconds=60;
-    _timer1 = Timer.periodic(period, (timer) {
-      myseconds--;
-      //print("myseconds is $myseconds");
-
-      if (DateTime.now().second == 0) {
-        //整分，打开第二个计时器
-        startTimer2();
-        //print(DateTime.now());
-        //print("已启动计时器2！");
-        //取消定时器1
-        cancelTime1();
-      }
-    });
+  //通知栏模式
+  Future onSelectNotification(String payload) {
+    debugPrint("payload : $payload");
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text('Notification'),
+        content: new Text('$payload'),
+      ),
+    );
   }
+  //显示通知栏
+  showNotification() async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High,importance: Importance.Max
+    );
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    for(var i=0;i<clocklists.length;i++){
+      if(clocklists[i].onwork && (clocklists[i].everyday || clocklists[i].dayslist[DateTime.now().weekday%7])
+          && clocklists[i].hour==DateTime.now().hour && clocklists[i].minute==DateTime.now().minute && DateTime.now().second==0)
+        //必须闹钟是处于工作状态，每天都是重复的或者今天是重复的一天，小时数和分钟数和现在的时间对得上
+          {
+            var nowHour=clocklists[i].getHourString();
+            var nowMinute=clocklists[i].getMinuteString();
+        await flutterLocalNotificationsPlugin.show(
+            0, '闹钟时间到', '$nowHour:$nowMinute', platform,
+            payload: '闹钟时间$nowHour:$nowMinute已到！');
 
-  //取消第一个定时器
-  void cancelTime1(){
-    if (_timer1 != null) {
-      _timer1.cancel();
-      _timer1 = null;
+        //结束计数(有待考虑，或许不用结束！)
+      }
     }
   }
   //退出的时候释放资源
   @override
   void dispose(){
     super.dispose();
-    cancelTime1();
-    cancelTimer2();
+    cancelTimer();
   }
   @override
   //初始化，读取文件获得闹钟列表，同时启动计时器1
   void initState() {
     //调用原initState
     super.initState();
-
+    //通知栏初始化
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings, onSelectNotification: onSelectNotification);
+    //读闹钟记录
     _readFile().then((value) {
       setState(() {
         //print("初始化刷新状态！");
       });
     });
-    startTimer1();
+    startTimer();
   }
 
   //进入删除闹钟页面的导引函数
@@ -402,9 +365,7 @@ class _AlarmState extends State<Alarm>  with AutomaticKeepAliveClientMixin{
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
       onWillPop: () async{
-        print("主界面返回键点击了");
         _writeFile().then((value) {
-          print("文件已保存！");
         });
         //最后直接返回true就好，会直接退出程序，而不需要Navigator.pop()了
         return true;
@@ -621,10 +582,6 @@ class ClockSettingPageState extends State<ClockSettingPage> {
                 onPressed: _cancelToHome,
                 child:
                 Icon(Icons.close,color: Colors.white,)
-//                new Text(
-//                  "取消",
-//                  textAlign: TextAlign.left,
-//                )
           ),
             actions: <Widget>[
               //点击添加
@@ -640,7 +597,7 @@ class ClockSettingPageState extends State<ClockSettingPage> {
             direction: Axis.vertical,
             children: <Widget>[
               Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Flex(
                     direction: Axis.horizontal,
                     children: <Widget>[
