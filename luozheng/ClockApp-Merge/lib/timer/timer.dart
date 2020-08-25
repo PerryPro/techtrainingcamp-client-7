@@ -52,10 +52,6 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
         if(disph==0&&dispm==0&&disps==0) {
           roll=true;
         }
-        if(_active==true) {
-          time--;
-          if(time==0)roll=true;
-        }
         if(roll==true) {
           _active=false;
           wan();

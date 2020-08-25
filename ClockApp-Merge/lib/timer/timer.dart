@@ -17,14 +17,10 @@ int time=20;
 int disph=0;
 int dispm=0;
 int disps=0;
-
 //是否在滚动
 bool roll=false;
-
 //对第一个按钮状态的控制，false代表停止中，true代表运行中
 bool _active=false;
-
-
 //主界面
 class BasicAppBarSample extends StatefulWidget {
   @override
@@ -46,22 +42,16 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
   Widget build(BuildContext context) {
 
     ScreenUtil.init(context, width: 1080, height: 2070, allowFontScaling:false );
-
     if(timer == null){
       timer = Timer.periodic(duration , (Timer t) {
         if(disph==0&&dispm==0&&disps==0) {
           roll=true;
-        }
-        if(_active==true) {
-          time--;
-          if(time==0)roll=true;
         }
         if(roll==true) {
           _active=false;
           wan();
         };
       });
-
     }
 
     return  Scaffold(
