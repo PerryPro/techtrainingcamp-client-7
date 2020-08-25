@@ -53,6 +53,7 @@ flutter:
     - assets/image/plane.jpg
     - assets/image/墨水.jpg
     - assets/image/星星.png
+    - assets/ringtone/法老.mp3
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.io/assets-and-images/#resolution-aware.
 
