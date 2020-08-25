@@ -76,9 +76,39 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
     }
     super.deactivate();
   }
-  //滚动之后应该怎么办
 
 
+   void tanchu()
+   {
+     showDialog<Null>(
+         context: context,
+         barrierDismissible: false,
+         builder: (BuildContext context)
+     {
+       return new AlertDialog(
+         title: new Text('窗口'),
+         content: new SingleChildScrollView(
+           child: new ListBody(
+             children: <Widget>[
+               new Text('定时结束'),
+             ],
+           ),
+         ),
+         actions: <Widget>[
+           new FlatButton(
+             child: new Text('确定'),
+             onPressed: () {
+               deactivate();
+               Navigator.pop(context);
+             },
+           ),
+         ],
+       );
+     },
+     ).then((val) {
+       print(val);
+     });
+   }
   //滚动之后应该怎么办
   void wan() {
     setState(() {
@@ -95,6 +125,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
           roll=true;
           if(x==0) {
             play();
+            tanchu();
             x=1;
           }
         }
@@ -107,7 +138,7 @@ class _BasicAppBarSampleState extends State<BasicAppBarSample> with AutomaticKee
         };
         if(x>0) {
           x++;
-          if(x==40)
+          if(x==10)
           {
             deactivate();
             x=-1;
